@@ -9,9 +9,9 @@ from fastapi_users import (
     schemas,
 )
 
-from db.models import User
-from auth.utils import get_user_db
-from config import Settings
+from src.db.database import User
+from src.db.database import get_user_db
+from src.config import Settings
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):

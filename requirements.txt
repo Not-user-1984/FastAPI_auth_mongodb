@@ -1,5 +1,5 @@
 asyncpg
 fastapi[all]
-fastapi-users[sqlalchemy]
+fastapi-users[beanie]
 python-dotenv
 motor

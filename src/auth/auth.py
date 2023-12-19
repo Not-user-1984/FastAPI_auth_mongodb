@@ -5,9 +5,9 @@ from fastapi_users.authentication import (
     JWTStrategy,
 )
 
-from auth.manager import get_user_manager
-from config import Settings
-from db.models import User
+from src.auth.manager import get_user_manager
+from src.config import Settings
+from src.db.database import User
 
 # cookie_transport = CookieTransport(cookie_name="bonds", cookie_max_age=3600)
 bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")

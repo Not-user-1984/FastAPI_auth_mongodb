@@ -1,23 +1,27 @@
-from typing import AsyncGenerator
+import motor.motor_asyncio
+from beanie import Document
+from fastapi_users.db import BeanieBaseUser, BeanieUserDatabase
+from pydantic import EmailStr, Field
 
-from sqlalchemy import MetaData
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
+from src.config import settings
 
-from config import settings
-
-Base = declarative_base()
-
-metadata = MetaData()
-
-engine = create_async_engine(settings.DATABASE_URL, poolclass=NullPool)
-async_session_maker = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False
+DATABASE_URL = settings.DATABASE_URL
+client = motor.motor_asyncio.AsyncIOMotorClient(
+    DATABASE_URL, uuidRepresentation="standard"
 )
+db = client["database_name"]
 
 
-async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_session_maker() as session:
-        yield session
+class User(BeanieBaseUser, Document):
+    name: str = Field(...)
+    phone: str = Field(...)
+    email: EmailStr = Field(..., unique=True)
+    site: str = Field(...)
+    hashed_password: str = Field(..., description="Hashed password")
+
+    class Meta:
+        collection = "users"
+
+
+async def get_user_db():
+    yield BeanieUserDatabase(User)
