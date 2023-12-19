@@ -1,0 +1,5 @@
+asyncpg
+fastapi[all]
+fastapi-users[sqlalchemy]
+python-dotenv
+motor
